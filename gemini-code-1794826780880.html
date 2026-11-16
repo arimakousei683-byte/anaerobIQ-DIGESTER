@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>anaerobIQ DIGESTER | Biogas Suite v7.7</title>
+  <style>
+    :root {
+      --bg-dark: #091310;
+      --bg-card: #10211b;
+      --bg-card-hover: #152b23;
+      --border: #1e3d32;
+      --primary: #10b981;
+      --primary-hover: #059669;
+      --accent: #34d399;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --warning-bg: rgba(245, 158, 11, 0.1);
+      --warning-border: rgba(245, 158, 11, 0.35);
+      --warning-text: #fbbf24;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      line-height: 1.6;
+    }
+
+    /* Navigation */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(9, 19, 16, 0.9);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-container {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--text-main);
+      font-weight: 700;
+      font-size: 1.2rem;
+      letter-spacing: 0.3px;
+    }
+
+    .brand-badge {
+      background: var(--primary);
+      color: #041d15;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 0.2rem 0.5rem;
+      border-radius: 6px;
+      text-transform: uppercase;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: color 0.2s;
+    }
+
+    nav a:hover {
+      color: var(--accent);
+    }
+
+    /* Hero Section */
+    .hero {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 4.5rem 1.5rem 3.5rem;
+      text-align: center;
+    }
+
+    .version-pill {
+      display: inline-block;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      color: var(--accent);
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 0.35rem 0.9rem;
+      border-radius: 999px;
+      margin-bottom: 1.25rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 1rem;
+      letter-spacing: -0.02em;
+    }
+
+    .hero h1 span {
+      color: var(--primary);
+    }
+
+    .hero p {
+      max-width: 680px;
+      margin: 0 auto 2rem;
+      color: var(--text-muted);
+      font-size: 1.1rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      padding: 0.85rem 1.5rem;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.98rem;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #031c14;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: var(--bg-card);
+      color: var(--text-main);
+      border-color: var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--primary);
+    }
+
+    /* Sections */
+    .section {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+
+    .section-header {
+      margin-bottom: 2rem;
+    }
+
+    .section-header h2 {
+      font-size: 1.75rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .section-header p {
+      color: var(--text-muted);
+    }
+
+    /* Download Cards Grid */
+    .downloads-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .file-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .file-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    .file-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .file-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: rgba(16, 185, 129, 0.14);
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .file-tag {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.25rem 0.65rem;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--accent);
+    }
+
+    .file-card h3 {
+      font-size: 1.25rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .file-name {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.88rem;
+      color: var(--accent);
+      background: rgba(0, 0, 0, 0.25);
+      padding: 0.3rem 0.6rem;
+      border-radius: 6px;
+      display: inline-block;
+      margin-bottom: 0.85rem;
+      word-break: break-all;
+    }
+
+    .file-card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .file-meta {
+      list-style: none;
+      border-top: 1px solid var(--border);
+      padding-top: 1rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      display: grid;
+      gap: 0.4rem;
+    }
+
+    .file-meta li strong {
+      color: var(--text-main);
+    }
+
+    .card-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .card-actions .btn {
+      flex: 1;
+      min-width: 140px;
+    }
+
+    /* PDF Viewer Box */
+    .pdf-viewer-wrapper {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .pdf-toolbar {
+      padding: 0.9rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .pdf-toolbar span {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .pdf-frame {
+      width: 100%;
+      height: 560px;
+      border: none;
+      display: block;
+      background: #1a2421;
+    }
+
+    /* Modules Grid */
+    .modules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .module-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.4rem;
+    }
+
+    .module-step {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.4rem;
+    }
+
+    .module-card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .module-card p {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+    }
+
+    /* Safety Notice */
+    .safety-box {
+      background: var(--warning-bg);
+      border: 1px solid var(--warning-border);
+      border-radius: 14px;
+      padding: 1.25rem 1.5rem;
+      margin-top: 2.5rem;
+    }
+
+    .safety-box h4 {
+      color: var(--warning-text);
+      margin-bottom: 0.35rem;
+      font-size: 1rem;
+    }
+
+    .safety-box p {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      margin-top: 3rem;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 640px) {
+      nav a.hide-mobile {
+        display: none;
+      }
+      .pdf-frame {
+        height: 400px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="nav-container">
+      <a href="#" class="brand">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2v6m0 0c-3.5 0-6 2.5-6 6a6 6 0 0 0 12 0c0-3.5-2.5-6-6-6Z"/>
+          <path d="M9 14c0 1.7 1.3 3 3 3"/>
+        </svg>
+        anaerobIQ DIGESTER
+        <span class="brand-badge">v7.7</span>
+      </a>
+      <nav>
+        <a href="#downloads" class="hide-mobile">Files</a>
+        <a href="#manual-preview" class="hide-mobile">Manual Preview</a>
+        <a href="#modules" class="hide-mobile">System Modules</a>
+        <a href="app-release.apk" download class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.88rem;">Download APK</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="version-pill">Biogas Suite v7.7 • Official Application &amp; Documentation</div>
+    <h1><span>anaerobIQ</span> DIGESTER</h1>
+    <p>
+      Interactive anaerobic digestion modeling, feedstock &amp; 1:1 slurry calculations, pH buffer estimation, and 3D CAD reactor simulation—packaged for mobile deployment with complete user documentation.
+    </p>
+    <div class="hero-actions">
+      <a href="app-release.apk" download class="btn btn-primary">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Download Android APK
+      </a>
+      <a href="anaerobIQ User_Manual (1).pdf" download class="btn btn-secondary">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+        </svg>
+        Download PDF Manual
+      </a>
+    </div>
+  </section>
+
+  <!-- Files & Downloads Section -->
+  <section id="downloads" class="section">
+    <div class="section-header">
+      <h2>System Release Files</h2>
+      <p>Download the Android installer package and the step-by-step PDF user guide directly below.</p>
+    </div>
+
+    <div class="downloads-grid">
+      <!-- APK File Card -->
+      <article class="file-card">
+        <div>
+          <div class="file-top">
+            <div class="file-icon" aria-hidden="true">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/>
+              </svg>
+            </div>
+            <span class="file-tag">Android Package (.APK)</span>
+          </div>
+          <h3>anaerobIQ Mobile Application</h3>
+          <div class="file-name">app-release.apk</div>
+          <p>
+            Installable Android release build containing all four integrated Biogas Suite modules: Digester Calculator, AI Planner, pH Estimator, and 3D CAD Simulator.
+          </p>
+          <ul class="file-meta">
+            <li><strong>Platform:</strong> Android OS (APK Installer)</li>
+            <li><strong>Version:</strong> Biogas Suite v7.7</li>
+            <li><strong>Install Note:</strong> Enable "Install from Unknown Sources" if prompted by your device.</li>
+          </ul>
+        </div>
+        <div class="card-actions">
+          <a href="app-release.apk" download="app-release.apk" class="btn btn-primary">Download APK</a>
+        </div>
+      </article>
+
+      <!-- PDF Manual Card -->
+      <article class="file-card">
+        <div>
+          <div class="file-top">
+            <div class="file-icon" aria-hidden="true">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+              </svg>
+            </div>
+            <span class="file-tag">Documentation (.PDF)</span>
+          </div>
+          <h3>Application User Manual</h3>
+          <div class="file-name">anaerobIQ User_Manual (1).pdf</div>
+          <p>
+            Complete 8-page illustrated walkthrough covering workspace navigation, C:N ratio sizing, retention schedules, module data syncing, and safety guidelines.
+          </p>
+          <ul class="file-meta">
+            <li><strong>Format:</strong> Portable Document Format (8 Pages)</li>
+            <li><strong>Version:</strong> v7.7 Reference Edition</li>
+            <li><strong>Contents:</strong> Modules 01–05, Connected Workflow &amp; Troubleshooting</li>
+          </ul>
+        </div>
+        <div class="card-actions">
+          <a href="anaerobIQ User_Manual (1).pdf" download class="btn btn-primary">Download PDF</a>
+          <a href="anaerobIQ User_Manual (1).pdf" target="_blank" rel="noopener" class="btn btn-secondary">Open in New Tab</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- Embedded PDF Preview Section -->
+  <section id="manual-preview" class="section">
+    <div class="section-header">
+      <h2>User Manual Preview</h2>
+      <p>Read <strong>anaerobIQ User_Manual (1).pdf</strong> directly inside your browser.</p>
+    </div>
+
+    <div class="pdf-viewer-wrapper">
+      <div class="pdf-toolbar">
+        <span>Document: <strong>anaerobIQ User_Manual (1).pdf</strong> (8 Pages)</span>
+        <a href="anaerobIQ User_Manual (1).pdf" target="_blank" rel="noopener" class="btn btn-secondary" style="padding: 0.45rem 0.9rem; font-size: 0.85rem;">
+          Full Screen PDF
+        </a>
+      </div>
+      <iframe
+        class="pdf-frame"
+        src="anaerobIQ User_Manual (1).pdf"
+        title="anaerobIQ DIGESTER User Manual PDF">
+        <p style="padding: 1.5rem; color: var(--text-muted);">
+          Your browser does not support inline PDF viewing.
+          <a href="anaerobIQ User_Manual (1).pdf" style="color: var(--accent);">Click here to download the PDF manual.</a>
+        </p>
+      </iframe>
+    </div>
+  </section>
+
+  <!-- System Modules Overview -->
+  <section id="modules" class="section">
+    <div class="section-header">
+      <h2>Core System Modules</h2>
+      <p>Summary of the four connected modules documented in the Biogas Suite v7.7 User Manual.</p>
+    </div>
+
+    <div class="modules-grid">
+      <div class="module-card">
+        <div class="module-step">Module 01</div>
+        <h3>Digester Calculator</h3>
+        <p>
+          Calculates cow manure, food waste, and garden waste masses alongside a 1:1 solids-to-water slurry ratio, target C:N ratios (25.0:1, 27.5:1, 30.0:1), and cooking yield estimates.
+        </p>
+      </div>
+
+      <div class="module-card">
+        <div class="module-step">Module 02</div>
+        <h3>AI Planner</h3>
+        <p>
+          Generates mixture shares and a four-stage production timeline (Hydrolysis, Acidogenesis, Peak Methanogenesis, Stabilization) across 15–45 day retention cycles.
+        </p>
+      </div>
+
+      <div class="module-card">
+        <div class="module-step">Module 03</div>
+        <h3>pH Estimator</h3>
+        <p>
+          Models buffer capacity (Low, Moderate, High) and simulated reagent dosage splits based on digester volume, slurry volume, and current vs. target pH levels.
+        </p>
+      </div>
+
+      <div class="module-card">
+        <div class="module-step">Module 04</div>
+        <h3>3D CAD Simulator</h3>
+        <p>
+          Visualizes the reactor vessel with Cutaway X-Ray mode, ball-valve flow states, biogas storage bag telemetry, and virtual stove burner diagnostics.
+        </p>
+      </div>
+    </div>
+
+    <div class="safety-box">
+      <h4>Simulation &amp; Safety Notice</h4>
+      <p>
+        Outputs generated by <strong>anaerobIQ DIGESTER</strong> (Biogas Suite v7.7) are software-modeled estimates for planning and educational visualization. Do not treat simulated pH dosages, gas pressures, or virtual burner controls as instructions for handling physical chemicals or operating unvalidated biogas equipment.
+      </p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2026 <strong>anaerobIQ DIGESTER</strong> • Biogas Suite v7.7 Release Portal</p>
+  </footer>
+
+</body>
+</html>
